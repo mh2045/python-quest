@@ -1,31 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>PythonQuest</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#0d0f14; --surface:#151820; --s2:#1c2030; --border:#252a38;
-  --a:#f0c040; --a2:#4af0a0; --a3:#f06080; --a4:#7090ff;
-  --text:#e8eaf0; --muted:#6a7090;
-}
+:root{--bg:#0d0f14;--surface:#151820;--s2:#1c2030;--border:#252a38;--a:#f0c040;--a2:#4af0a0;--a3:#f06080;--a4:#7090ff;--text:#e8eaf0;--muted:#6a7090}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 body{font-family:'Syne',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 button{cursor:pointer;font-family:'Syne',sans-serif}
 button:disabled{cursor:not-allowed}
 textarea{font-family:'Space Mono',monospace;-webkit-appearance:none}
 input{font-family:'Syne',sans-serif}
-
-/* ── SCREENS ── */
 .screen{display:none;min-height:100vh;flex-direction:column}
 .screen.on{display:flex}
-
-/* ── LOGIN ── */
-#s-login{align-items:center;justify-content:center;padding:2rem;
-  background:radial-gradient(ellipse 80% 60% at 50% 30%,#1a2040 0%,var(--bg) 70%)}
+#s-login{align-items:center;justify-content:center;padding:2rem;background:radial-gradient(ellipse 80% 60% at 50% 30%,#1a2040 0%,var(--bg) 70%)}
 .logo{font-size:clamp(2rem,8vw,3.2rem);font-weight:800;letter-spacing:-2px;line-height:1;margin-bottom:.3rem}
 .logo span{color:var(--a)}
 .logo-sub{font-family:'Space Mono',monospace;color:var(--muted);font-size:.68rem;letter-spacing:3px;text-transform:uppercase;margin-bottom:2.5rem}
@@ -33,63 +23,47 @@ input{font-family:'Syne',sans-serif}
 .login-box h2{font-size:1.1rem;font-weight:700;margin-bottom:.4rem}
 .login-box p{font-size:.82rem;color:var(--muted);margin-bottom:1.4rem;line-height:1.6}
 .field-label{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:.4rem}
-.field-input{width:100%;background:var(--s2);border:1.5px solid var(--border);border-radius:8px;
-  color:var(--text);font-size:.95rem;padding:.7rem 1rem;outline:none;transition:border-color .2s;margin-bottom:1rem}
+.field-input{width:100%;background:var(--s2);border:1.5px solid var(--border);border-radius:8px;color:var(--text);font-size:.95rem;padding:.7rem 1rem;outline:none;transition:border-color .2s;margin-bottom:1rem}
 .field-input:focus{border-color:var(--a4)}
-.btn-primary{width:100%;background:var(--a);color:#000;border:none;border-radius:8px;
-  padding:.7rem;font-weight:700;font-size:.95rem;transition:background .15s}
+.btn-primary{width:100%;background:var(--a);color:#000;border:none;border-radius:8px;padding:.7rem;font-weight:700;font-size:.95rem;transition:background .15s}
 .btn-primary:hover{background:#ffd060}
 .login-note{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);text-align:center;margin-top:1rem;line-height:1.7}
-
-/* ── HOME ── */
-#s-home{align-items:center;justify-content:flex-start;padding:1.5rem 1.2rem;
-  background:radial-gradient(ellipse 80% 60% at 50% 20%,#1a2040 0%,var(--bg) 70%)}
+#s-home{align-items:center;justify-content:flex-start;padding:1.5rem 1.2rem;background:radial-gradient(ellipse 80% 60% at 50% 20%,#1a2040 0%,var(--bg) 70%)}
 .home-top{width:100%;max-width:680px;display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
 .home-logo{font-size:1.5rem;font-weight:800;letter-spacing:-1px}
 .home-logo span{color:var(--a)}
-.user-badge{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);
-  background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:.3rem .8rem}
+.user-badge{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);background:var(--surface);border:1px solid var(--border);border-radius:99px;padding:.3rem .8rem}
 .xp-wrap{width:100%;max-width:680px;margin-bottom:1.8rem}
-.xp-top{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;
-  font-size:.68rem;color:var(--muted);margin-bottom:.4rem}
+.xp-top{display:flex;justify-content:space-between;font-family:'Space Mono',monospace;font-size:.68rem;color:var(--muted);margin-bottom:.4rem}
 .xp-bar{height:6px;background:var(--s2);border-radius:99px;overflow:hidden}
 .xp-fill{height:100%;background:linear-gradient(90deg,var(--a),var(--a2));border-radius:99px;transition:width .6s ease}
+.tier-label{width:100%;max-width:680px;font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:.6rem;padding-bottom:.4rem;border-bottom:1px solid var(--border)}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:.75rem;width:100%;max-width:680px;margin-bottom:1.5rem}
-.card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;
-  padding:1rem;position:relative;transition:border-color .2s,transform .15s}
+.card{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:1rem;position:relative;transition:border-color .2s,transform .15s}
 .card.unlocked{cursor:pointer}
 .card.unlocked:hover{border-color:var(--a);transform:translateY(-2px)}
 .card.done{border-color:var(--a2)}
 .card.locked{opacity:.38}
 .card-check{position:absolute;top:.5rem;right:.7rem;color:var(--a2);font-weight:700;font-size:.82rem}
 .card-icon{font-size:1.4rem;margin-bottom:.35rem}
-.card-num{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);
-  letter-spacing:1px;text-transform:uppercase;margin-bottom:.25rem}
+.card-num{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--muted);letter-spacing:1px;text-transform:uppercase;margin-bottom:.25rem}
 .card-title{font-size:.88rem;font-weight:700;line-height:1.3}
 .card-sub{font-size:.72rem;color:var(--muted);margin-top:.2rem}
-.home-note{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);
-  max-width:340px;text-align:center;line-height:1.9}
-
-/* ── LESSON ── */
+.home-note{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--muted);max-width:340px;text-align:center;line-height:1.9}
 #s-lesson{background:var(--bg)}
-.lesson-header{background:var(--surface);border-bottom:1px solid var(--border);
-  padding:.85rem 1.2rem;display:flex;align-items:center;gap:.75rem;
-  position:sticky;top:0;z-index:10}
-.btn-back{background:none;border:1px solid var(--border);color:var(--muted);
-  padding:.32rem .75rem;border-radius:6px;font-family:'Space Mono',monospace;font-size:.7rem;transition:all .15s}
+.lesson-header{background:var(--surface);border-bottom:1px solid var(--border);padding:.85rem 1.2rem;display:flex;align-items:center;gap:.75rem;position:sticky;top:0;z-index:10}
+.btn-back{background:none;border:1px solid var(--border);color:var(--muted);padding:.32rem .75rem;border-radius:6px;font-family:'Space Mono',monospace;font-size:.7rem;transition:all .15s}
 .btn-back:hover{border-color:var(--text);color:var(--text)}
 .lesson-title-wrap{flex:1}
 .lesson-title-wrap h2{font-weight:700;font-size:.98rem}
 .lesson-title-wrap p{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
-.dots{display:flex;gap:5px}
+.dots{display:flex;gap:5px;flex-wrap:wrap;max-width:160px}
 .dot{width:8px;height:8px;border-radius:50%;background:var(--border);transition:all .25s}
 .dot.active{background:var(--a);transform:scale(1.35)}
 .dot.done{background:var(--a2)}
 .lesson-body{flex:1;padding:1.5rem 1.2rem;max-width:680px;width:100%;margin:0 auto}
 .slide{animation:slideUp .25s ease}
-.badge{display:inline-block;border-radius:99px;padding:.2rem .75rem;
-  font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:2px;
-  text-transform:uppercase;margin-bottom:1rem}
+.badge{display:inline-block;border-radius:99px;padding:.2rem .75rem;font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;margin-bottom:1rem}
 .badge-learn{background:#1a2a50;color:var(--a4);border:1px solid #2a3a70}
 .badge-quiz{background:#2a2010;color:var(--a);border:1px solid #3a3020}
 .badge-code{background:#102a1a;color:var(--a2);border:1px solid #1a3a2a}
@@ -97,124 +71,84 @@ input{font-family:'Syne',sans-serif}
 .slide p{font-size:.93rem;line-height:1.8;color:#b0b8d0;margin-bottom:.75rem}
 .slide ul{padding-left:1.3rem;margin-bottom:.75rem}
 .slide li{font-size:.9rem;line-height:1.75;color:#b0b8d0;margin-bottom:.15rem}
-.code-block{background:#0a0c12;border:1px solid var(--border);border-radius:10px;
-  padding:1rem 1.2rem;margin:.8rem 0;overflow-x:auto}
+.code-block{background:#0a0c12;border:1px solid var(--border);border-radius:10px;padding:1rem 1.2rem;margin:.8rem 0;overflow-x:auto}
 .code-block pre{font-family:'Space Mono',monospace;font-size:.77rem;line-height:1.85;color:#c8d0e8;margin:0}
-.kw{color:#c080ff} .fn{color:#80c8ff} .str{color:#80e8a0} .num{color:#ffb060}
-.cmt{color:#506080;font-style:italic} .id{color:#f0c040}
+.kw{color:#c080ff}.fn{color:#80c8ff}.str{color:#80e8a0}.num{color:#ffb060}.cmt{color:#506080;font-style:italic}.id{color:#f0c040}
 .quiz-opts{display:flex;flex-direction:column;gap:.6rem;margin:.8rem 0}
-.quiz-opt{background:var(--surface);border:1.5px solid var(--border);color:var(--text);
-  padding:.8rem 1.1rem;border-radius:9px;font-family:'Space Mono',monospace;
-  font-size:.82rem;text-align:left;transition:all .15s;line-height:1.55;white-space:pre-wrap}
+.quiz-opt{background:var(--surface);border:1.5px solid var(--border);color:var(--text);padding:.8rem 1.1rem;border-radius:9px;font-family:'Space Mono',monospace;font-size:.82rem;text-align:left;transition:all .15s;line-height:1.55;white-space:pre-wrap}
 .quiz-opt:hover:not(:disabled){border-color:var(--a);background:var(--s2)}
 .quiz-opt.correct{background:#2a5a3a;border-color:var(--a2);color:var(--a2)}
 .quiz-opt.wrong{background:#5a2a2a;border-color:var(--a3);color:var(--a3)}
-.feedback{border-radius:9px;padding:.85rem 1.1rem;font-size:.86rem;
-  line-height:1.65;margin-top:.6rem;display:none}
+.feedback{border-radius:9px;padding:.85rem 1.1rem;font-size:.86rem;line-height:1.65;margin-top:.6rem;display:none}
 .feedback.show{display:block}
 .feedback.good{background:#152a1f;border:1px solid var(--a2);color:#90e8b0}
 .feedback.bad{background:#2a1520;border:1px solid var(--a3);color:#f09090}
 .code-wrap{background:#0a0c12;border:1.5px solid var(--a4);border-radius:10px;overflow:hidden;margin-bottom:.7rem}
-.code-label{background:var(--s2);padding:.38rem 1rem;font-family:'Space Mono',monospace;
-  font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid var(--border)}
-.code-area{width:100%;background:transparent;border:none;color:#c8d0e8;
-  font-family:'Space Mono',monospace;font-size:.8rem;line-height:1.75;
-  padding:.85rem 1.1rem;resize:vertical;min-height:110px;outline:none}
+.code-label{background:var(--s2);padding:.38rem 1rem;font-family:'Space Mono',monospace;font-size:.6rem;color:var(--muted);letter-spacing:2px;text-transform:uppercase;border-bottom:1px solid var(--border)}
+.code-area{width:100%;background:transparent;border:none;color:#c8d0e8;font-family:'Space Mono',monospace;font-size:.8rem;line-height:1.75;padding:.85rem 1.1rem;resize:vertical;min-height:120px;outline:none}
 .code-btns{display:flex;gap:.5rem;flex-wrap:wrap;margin-bottom:.7rem}
-.btn-run{background:var(--a4);color:#000;border:none;padding:.52rem 1.3rem;
-  border-radius:7px;font-weight:700;font-size:.84rem}
-.btn-hint{background:var(--s2);border:1px solid var(--border);color:var(--text);
-  padding:.52rem 1.1rem;border-radius:7px;font-size:.82rem}
-.output{background:#06080e;border:1px solid var(--border);border-radius:8px;
-  padding:.75rem 1rem;font-family:'Space Mono',monospace;font-size:.77rem;
-  white-space:pre-wrap;line-height:1.65;display:none}
+.btn-run{background:var(--a4);color:#000;border:none;padding:.52rem 1.3rem;border-radius:7px;font-weight:700;font-size:.84rem}
+.btn-hint{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.52rem 1.1rem;border-radius:7px;font-size:.82rem}
+.output{background:#06080e;border:1px solid var(--border);border-radius:8px;padding:.75rem 1rem;font-family:'Space Mono',monospace;font-size:.77rem;white-space:pre-wrap;line-height:1.65;display:none}
 .output.show{display:block}
 .output.ok{border-color:var(--a2);color:var(--a2)}
 .output.err{border-color:var(--a3);color:var(--a3)}
 .output.hint{border-color:var(--border);color:var(--muted)}
-.lesson-footer{background:var(--surface);border-top:1px solid var(--border);
-  padding:.9rem 1.2rem;display:flex;align-items:center;justify-content:space-between;
-  position:sticky;bottom:0}
+.lesson-footer{background:var(--surface);border-top:1px solid var(--border);padding:.9rem 1.2rem;display:flex;align-items:center;justify-content:space-between;position:sticky;bottom:0}
 .slide-counter{font-family:'Space Mono',monospace;font-size:.66rem;color:var(--muted)}
 .nav-btns{display:flex;gap:.5rem}
-.btn-prev{background:var(--s2);border:1px solid var(--border);color:var(--text);
-  padding:.52rem 1.1rem;border-radius:7px;font-weight:700;font-size:.84rem}
+.btn-prev{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.52rem 1.1rem;border-radius:7px;font-weight:700;font-size:.84rem}
 .btn-prev:disabled{color:var(--muted)}
-.btn-next{background:var(--a);color:#000;border:none;padding:.52rem 1.5rem;
-  border-radius:7px;font-weight:700;font-size:.84rem;transition:background .15s}
+.btn-next{background:var(--a);color:#000;border:none;padding:.52rem 1.5rem;border-radius:7px;font-weight:700;font-size:.84rem;transition:background .15s}
 .btn-next:disabled{background:var(--border);color:var(--muted)}
 .btn-next:not(:disabled):hover{background:#ffd060}
-
-/* ── RESULT ── */
-#s-result{align-items:center;justify-content:center;text-align:center;padding:2rem;
-  background:radial-gradient(ellipse 70% 50% at 50% 40%,#1a3020 0%,var(--bg) 70%)}
+#s-result{align-items:center;justify-content:center;text-align:center;padding:2rem;background:radial-gradient(ellipse 70% 50% at 50% 40%,#1a3020 0%,var(--bg) 70%)}
 .result-icon{font-size:4rem;margin-bottom:1rem;animation:pop .4s ease}
 .result-title{font-size:clamp(1.4rem,6vw,2rem);font-weight:800;margin-bottom:.4rem}
 .result-sub{font-family:'Space Mono',monospace;color:var(--muted);font-size:.76rem;margin-bottom:1.8rem}
-.xp-box{background:var(--surface);border:1px solid var(--a);border-radius:14px;
-  padding:.9rem 2rem;display:inline-block;margin-bottom:1rem}
+.xp-box{background:var(--surface);border:1px solid var(--a);border-radius:14px;padding:.9rem 2rem;display:inline-block;margin-bottom:1rem}
 .xp-big{font-size:2.4rem;font-weight:800;color:var(--a)}
-.xp-lbl{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);
-  letter-spacing:3px;text-transform:uppercase}
-.save-badge{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--a2);
-  background:#152a1f;border:1px solid var(--a2);border-radius:8px;
-  padding:.4rem .9rem;display:inline-block;margin-bottom:1.5rem}
+.xp-lbl{font-family:'Space Mono',monospace;font-size:.62rem;color:var(--muted);letter-spacing:3px;text-transform:uppercase}
+.save-badge{font-family:'Space Mono',monospace;font-size:.7rem;color:var(--a2);background:#152a1f;border:1px solid var(--a2);border-radius:8px;padding:.4rem .9rem;display:inline-block;margin-bottom:1.5rem}
 .result-btns{display:flex;gap:.7rem;flex-wrap:wrap;justify-content:center}
-.btn-home{background:var(--s2);border:1px solid var(--border);color:var(--text);
-  padding:.6rem 1.4rem;border-radius:8px;font-weight:700;font-size:.88rem}
-.btn-next-lesson{background:var(--a);color:#000;border:none;
-  padding:.6rem 1.4rem;border-radius:8px;font-weight:700;font-size:.88rem}
-
-/* ── TOAST ── */
-.toast{position:fixed;top:14px;right:14px;background:var(--surface);
-  padding:.55rem 1rem;border-radius:8px;font-family:'Space Mono',monospace;
-  font-size:.76rem;z-index:999;pointer-events:none;
-  transform:translateX(120%);transition:transform .25s ease}
+.btn-home{background:var(--s2);border:1px solid var(--border);color:var(--text);padding:.6rem 1.4rem;border-radius:8px;font-weight:700;font-size:.88rem}
+.btn-next-lesson{background:var(--a);color:#000;border:none;padding:.6rem 1.4rem;border-radius:8px;font-weight:700;font-size:.88rem}
+.toast{position:fixed;top:14px;right:14px;background:var(--surface);padding:.55rem 1rem;border-radius:8px;font-family:'Space Mono',monospace;font-size:.76rem;z-index:999;pointer-events:none;transform:translateX(120%);transition:transform .25s ease}
 .toast.show{transform:translateX(0)}
 .toast.good{border:1px solid var(--a2);color:var(--a2)}
-.toast.bad{border:1px solid var(--a3);color:var(--a3)}
-
 @keyframes slideUp{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
 @keyframes pop{0%{transform:scale(0);opacity:0}60%{transform:scale(1.2)}100%{transform:scale(1);opacity:1}}
 </style>
 </head>
 <body>
-
-<!-- TOAST -->
 <div class="toast" id="toast"></div>
-
-<!-- ══ LOGIN SCREEN ══ -->
 <div id="s-login" class="screen on">
   <div class="logo">Python<span>Quest</span></div>
   <div class="logo-sub">Learn to code — one quest at a time</div>
   <div class="login-box">
-    <h2>Welcome back 👋</h2>
+    <h2>Welcome back</h2>
     <p>Enter your name to load your saved progress and pick up where you left off.</p>
     <div class="field-label">Your Name</div>
-    <input class="field-input" id="login-input" type="text" placeholder="e.g. Mike" autocomplete="off" />
-    <button class="btn-primary" onclick="doLogin()">Start Playing →</button>
-    <div class="login-note">Your progress saves automatically to the cloud.<br>Use the same name each time to keep your XP.</div>
+    <input class="field-input" id="login-input" type="text" placeholder="e.g. Mike" autocomplete="off">
+    <button class="btn-primary" onclick="doLogin()">Start Playing</button>
+    <div class="login-note">Progress saves automatically to the cloud.<br>Use the same name each time to keep your XP.</div>
   </div>
 </div>
-
-<!-- ══ HOME SCREEN ══ -->
 <div id="s-home" class="screen">
   <div class="home-top">
     <div class="home-logo">Python<span>Quest</span></div>
-    <div class="user-badge" id="user-badge">👤 —</div>
+    <div class="user-badge" id="user-badge">— </div>
   </div>
   <div class="xp-wrap">
-    <div class="xp-top"><span>⚡ Total XP</span><span id="xp-display">0 / 590</span></div>
+    <div class="xp-top"><span>XP Progress</span><span id="xp-display">0 / 0</span></div>
     <div class="xp-bar"><div class="xp-fill" id="xp-fill" style="width:0%"></div></div>
   </div>
-  <div class="grid" id="lesson-grid"></div>
-  <div class="home-note">💡 Each lesson ~5–10 min · Lessons unlock in order<br>Progress saves to the cloud automatically</div>
+  <div id="lesson-grid-wrap" style="width:100%;max-width:680px"></div>
+  <div class="home-note">Each lesson ~5 to 10 min. Complete in order. Progress saves to the cloud.</div>
 </div>
-
-<!-- ══ LESSON SCREEN ══ -->
 <div id="s-lesson" class="screen">
   <div class="lesson-header">
-    <button class="btn-back" onclick="goHome()">← Back</button>
+    <button class="btn-back" onclick="goHome()">Back</button>
     <div class="lesson-title-wrap">
       <h2 id="lesson-h-title">Lesson</h2>
       <p id="lesson-h-sub">Python Quest</p>
@@ -225,691 +159,23 @@ input{font-family:'Syne',sans-serif}
   <div class="lesson-footer">
     <div class="slide-counter" id="slide-counter">1 / 1</div>
     <div class="nav-btns">
-      <button class="btn-prev" id="btn-prev" onclick="prevSlide()">← Prev</button>
-      <button class="btn-next" id="btn-next" onclick="nextSlide()">Next →</button>
+      <button class="btn-prev" id="btn-prev" onclick="prevSlide()">Prev</button>
+      <button class="btn-next" id="btn-next" onclick="nextSlide()">Next</button>
     </div>
   </div>
 </div>
-
-<!-- ══ RESULT SCREEN ══ -->
 <div id="s-result" class="screen">
   <div class="result-icon" id="r-icon">🎉</div>
   <div class="result-title" id="r-title">Lesson Complete!</div>
   <div class="result-sub" id="r-sub">Well done!</div>
-  <div class="xp-box">
-    <div class="xp-big" id="r-xp">+60</div>
-    <div class="xp-lbl">XP Earned</div>
-  </div>
-  <br>
-  <div class="save-badge" id="r-save">💾 Progress saved</div>
+  <div class="xp-box"><div class="xp-big" id="r-xp">+60</div><div class="xp-lbl">XP Earned</div></div><br>
+  <div class="save-badge" id="r-save">Progress saved</div>
   <div class="result-btns">
     <button class="btn-home" onclick="goHome()">Back to Map</button>
-    <button class="btn-next-lesson" id="btn-next-lesson" onclick="goNextLesson()">Next Lesson →</button>
+    <button class="btn-next-lesson" id="btn-next-lesson" onclick="goNextLesson()">Next Lesson</button>
   </div>
 </div>
-
-<script>
-/* ══════════════════════════════════════════
-   LESSONS
-══════════════════════════════════════════ */
-const LESSONS = [
-  { id:0, icon:'🖨️', title:'Print & Output', sub:'Make Python talk', xp:60, slides:[
-    { type:'learn', title:'Welcome to Python Quest!', body:`
-      <p>Python is one of the most popular programming languages in the world — used for <b style="color:var(--a)">websites, AI, data science, and automation</b>.</p>
-      <p>The best part? It reads almost like plain English. We'll start with the most fundamental skill: <b style="color:var(--a2)">printing output to the screen</b>.</p>
-      <p>Every program needs a way to show results. In Python, we use the <code style="color:var(--a);background:var(--s2);padding:1px 5px;border-radius:4px;font-family:'Space Mono',monospace">print()</code> function.</p>`
-    },
-    { type:'learn', title:'The print() Function', body:`
-      <p>To display text, wrap it in <b style="color:var(--a)">print()</b> with quotes inside:</p>
-      <div class="code-block"><pre><span class="fn">print</span>(<span class="str">"Hello, World!"</span>)
-<span class="fn">print</span>(<span class="str">"Python is awesome"</span>)
-<span class="fn">print</span>(<span class="num">42</span>)</pre></div>
-      <p>Text (called a <b style="color:var(--a)">string</b>) goes inside quotes. Numbers don't need quotes.</p>
-      <p>Each print() call outputs on its own <b style="color:var(--a2)">new line</b>.</p>`
-    },
-    { type:'quiz', q:'Which correctly prints the word Python?',
-      opts:['print(Python)','print("Python")','Print("Python")','echo "Python"'], correct:1,
-      ok:'✓ Text must be in quotes. Python is also case-sensitive — Print with a capital P would error.',
-      bad:'✗ Text (strings) must be in quotes: print("Python"). It\'s lowercase print — Python is case-sensitive.'
-    },
-    { type:'learn', title:'Comments & Multiple Items', body:`
-      <p>Print multiple values with commas — Python adds a space between them:</p>
-      <div class="code-block"><pre><span class="fn">print</span>(<span class="str">"My name is"</span>, <span class="str">"Mike"</span>)  <span class="cmt"># My name is Mike</span>
-<span class="fn">print</span>(<span class="str">"Age:"</span>, <span class="num">25</span>)             <span class="cmt"># Age: 25</span></pre></div>
-      <p>Lines starting with <b style="color:var(--a)">#</b> are <b>comments</b> — Python ignores them. Use them to leave notes in your code!</p>`
-    },
-    { type:'quiz', q:'What does the # symbol do in Python?',
-      opts:['Prints the text that follows','Marks a comment — Python ignores it','Makes text bold',"It's a math operator"], correct:1,
-      ok:'✓ # starts a comment. Python skips that entire line — it\'s just a note for you to read.',
-      bad:'✗ # creates a comment. Python ignores that line entirely.'
-    },
-    { type:'code', title:'Try It: Your First Print',
-      inst:'Write a print statement that outputs: <b style="color:var(--a2)">Hello, I am learning Python!</b>',
-      hint:'print("Hello, I am learning Python!")',
-      check:(c)=>c.includes('print')&&(c.includes('Hello')||c.includes('hello')),
-      msg:'Use print() with your message inside quotes.'
-    },
-  ]},
-
-  { id:1, icon:'📦', title:'Variables', sub:'Storing information', xp:60, slides:[
-    { type:'learn', title:'What Is a Variable?', body:`
-      <p>A <b style="color:var(--a)">variable</b> is like a labelled box that stores a value. You give it a name and Python remembers what's inside.</p>
-      <div class="code-block"><pre><span class="id">name</span> = <span class="str">"Mike"</span>
-<span class="id">age</span> = <span class="num">30</span>
-<span class="id">score</span> = <span class="num">9.5</span>
-
-<span class="fn">print</span>(<span class="id">name</span>)   <span class="cmt"># Mike</span>
-<span class="fn">print</span>(<span class="id">age</span>)    <span class="cmt"># 30</span></pre></div>
-      <p>The <b style="color:var(--a)">=</b> sign is the <b>assignment operator</b> — it means "store this value." It does NOT mean equals like in math.</p>`
-    },
-    { type:'learn', title:'Naming Rules', body:`
-      <p>Variable names must follow these rules:</p>
-      <ul>
-        <li>✅ Start with a letter or underscore: <b style="color:var(--a2)">name</b>, <b style="color:var(--a2)">_score</b></li>
-        <li>✅ Can contain letters, numbers, underscores: <b style="color:var(--a2)">player1</b></li>
-        <li>❌ No spaces: <b style="color:var(--a3)">my score</b> is invalid</li>
-        <li>❌ Can't start with a number: <b style="color:var(--a3)">1player</b> is invalid</li>
-        <li>❌ No special characters: <b style="color:var(--a3)">my@score</b> is invalid</li>
-      </ul>
-      <p>Python convention uses <b style="color:var(--a)">snake_case</b> — lowercase words joined by underscores: player_name, high_score.</p>`
-    },
-    { type:'quiz', q:'Which variable name is valid in Python?',
-      opts:['2fast','my score','player_name','my-score'], correct:2,
-      ok:'✓ player_name uses letters and underscores — valid! snake_case is the Python convention.',
-      bad:'✗ No starting with numbers, no spaces, no hyphens. player_name is the correct choice.'
-    },
-    { type:'learn', title:'f-Strings: The Superpower', body:`
-      <p>The best way to mix text and variables is an <b style="color:var(--a)">f-string</b>. Put <code style="color:var(--a);background:var(--s2);padding:1px 5px;border-radius:4px;font-family:'Space Mono',monospace">f</code> before the quote, then use <code style="color:var(--a2);background:var(--s2);padding:1px 5px;border-radius:4px;font-family:'Space Mono',monospace">{}</code> for variables:</p>
-      <div class="code-block"><pre><span class="id">name</span> = <span class="str">"Mike"</span>
-<span class="id">score</span> = <span class="num">95</span>
-
-<span class="fn">print</span>(<span class="str">f"Player: {<span class="id">name</span>}, Score: {<span class="id">score</span>}"</span>)
-<span class="cmt"># Player: Mike, Score: 95</span></pre></div>
-      <p>The <b style="color:var(--a2)">f</b> stands for formatted string. Much cleaner than joining things with commas!</p>`
-    },
-    { type:'quiz', q:'color = "blue"\nprint(f"The sky is {color}")\n\nWhat is printed?',
-      opts:['The sky is {color}','The sky is color','The sky is blue','Error'], correct:2,
-      ok:"✓ The f-string replaces {color} with the variable's value: blue.",
-      bad:"✗ With an f-string, {color} gets replaced by the value stored in the variable. Output: The sky is blue."
-    },
-    { type:'code', title:'Challenge: Introduce Yourself',
-      inst:'Create a variable called <b style="color:var(--a)">name</b>, store your name, then use an f-string to print: <b style="color:var(--a2)">Hi, my name is [name]</b>',
-      hint:'name = "Mike"\nprint(f"Hi, my name is {name}")',
-      check:(c)=>(c.includes('f"')||c.includes("f'"))&&c.includes('name'),
-      msg:'Use an f-string (put f before your quote) and include {name} in curly braces.'
-    },
-  ]},
-
-  { id:2, icon:'🔢', title:'Data Types', sub:'int, float, string, bool', xp:70, slides:[
-    { type:'learn', title:'The 4 Core Data Types', body:`
-      <p>Python has four fundamental data types you'll use constantly:</p>
-      <div class="code-block"><pre><span class="cmt"># Integer — whole numbers</span>
-<span class="id">score</span> = <span class="num">42</span>
-
-<span class="cmt"># Float — decimal numbers</span>
-<span class="id">price</span> = <span class="num">9.99</span>
-
-<span class="cmt"># String — text (in quotes)</span>
-<span class="id">name</span> = <span class="str">"Alice"</span>
-
-<span class="cmt"># Boolean — True or False</span>
-<span class="id">is_active</span> = <span class="kw">True</span></pre></div>
-      <p>Python figures out the type automatically — you don't have to declare it.</p>`
-    },
-    { type:'quiz', q:'What data type is this?\n\nprice = 19.99',
-      opts:['Integer','String','Float','Boolean'], correct:2,
-      ok:'✓ Any number with a decimal point is a float (floating-point number).',
-      bad:'✗ 19.99 has a decimal point — that makes it a float. Integers are whole numbers only.'
-    },
-    { type:'learn', title:'Math Operators', body:`
-      <div class="code-block"><pre><span class="fn">print</span>(<span class="num">10</span> + <span class="num">3</span>)   <span class="cmt"># 13   addition</span>
-<span class="fn">print</span>(<span class="num">10</span> - <span class="num">3</span>)   <span class="cmt"># 7    subtraction</span>
-<span class="fn">print</span>(<span class="num">10</span> * <span class="num">3</span>)   <span class="cmt"># 30   multiplication</span>
-<span class="fn">print</span>(<span class="num">10</span> / <span class="num">3</span>)   <span class="cmt"># 3.33 division</span>
-<span class="fn">print</span>(<span class="num">10</span> ** <span class="num">2</span>)  <span class="cmt"># 100  power</span>
-<span class="fn">print</span>(<span class="num">10</span> % <span class="num">3</span>)   <span class="cmt"># 1    remainder (modulo)</span></pre></div>
-      <p>The <b style="color:var(--a)">%</b> operator (modulo) gives the remainder after division. Great for checking if a number is even or odd!</p>`
-    },
-    { type:'quiz', q:'What does print(7 % 2) output?',
-      opts:['3.5','1','0','14'], correct:1,
-      ok:'✓ 7 ÷ 2 = 3 remainder 1. The % operator returns just the remainder.',
-      bad:'✗ % returns the remainder. 7 ÷ 2 = 3 remainder 1, so 7 % 2 = 1.'
-    },
-    { type:'learn', title:'Type Conversion', body:`
-      <p>Convert between types using <b style="color:var(--a)">int()</b>, <b style="color:var(--a)">float()</b>, and <b style="color:var(--a)">str()</b>:</p>
-      <div class="code-block"><pre><span class="id">x</span> = <span class="str">"42"</span>         <span class="cmt"># This is a STRING</span>
-<span class="id">y</span> = <span class="fn">int</span>(<span class="id">x</span>)       <span class="cmt"># Now an INTEGER: 42</span>
-<span class="id">z</span> = <span class="fn">float</span>(<span class="id">x</span>)     <span class="cmt"># Now a FLOAT: 42.0</span>
-<span class="id">s</span> = <span class="fn">str</span>(<span class="num">99</span>)       <span class="cmt"># Integer to STRING: "99"</span></pre></div>
-      <p>⚠️ <b style="color:var(--a3)">Critical:</b> user input is ALWAYS a string in Python. To do math with it, convert it first with int() or float().</p>`
-    },
-    { type:'quiz', q:'x = "5"\nprint(x + x)\n\nWhat is the result?',
-      opts:['10','"10"','55','Error'], correct:2,
-      ok:'✓ x is a string, so + means concatenation (joining): "5" + "5" = "55".',
-      bad:'✗ x = "5" is a string. + joins strings: "5" + "5" = "55". To add numbers: int(x) + int(x) = 10.'
-    },
-  ]},
-
-  { id:3, icon:'⌨️', title:'User Input', sub:'Getting data from users', xp:70, slides:[
-    { type:'learn', title:'The input() Function', body:`
-      <p>Programs become interactive with <b style="color:var(--a)">input()</b>. It pauses and waits for the user to type:</p>
-      <div class="code-block"><pre><span class="id">name</span> = <span class="fn">input</span>(<span class="str">"What is your name? "</span>)
-<span class="fn">print</span>(<span class="str">f"Hello, {<span class="id">name</span>}!"</span>)</pre></div>
-      <p>The text inside input() is the <b style="color:var(--a2)">prompt</b> — what the user sees on screen.</p>
-      <p>⚠️ Critical rule: <b style="color:var(--a3)">input() ALWAYS returns a string</b>, even if the user types a number!</p>`
-    },
-    { type:'quiz', q:'A user types 25 when prompted. What type does input() return?',
-      opts:['Integer','Float','String','Boolean'], correct:2,
-      ok:"✓ input() ALWAYS returns a string. To get the number 25, use: int(input('Age: '))",
-      bad:'✗ input() always returns a string — even for numbers. Use int() or float() to convert.'
-    },
-    { type:'learn', title:'Input + Type Conversion', body:`
-      <div class="code-block"><pre><span class="cmt"># CRASHES — can't add string + number</span>
-<span class="id">age</span> = <span class="fn">input</span>(<span class="str">"Your age: "</span>)
-<span class="fn">print</span>(<span class="id">age</span> + <span class="num">1</span>)   <span class="cmt"># ❌ TypeError!</span>
-
-<span class="cmt"># WORKS — convert first</span>
-<span class="id">age</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Your age: "</span>))
-<span class="fn">print</span>(<span class="id">age</span> + <span class="num">1</span>)   <span class="cmt"># ✅ Works!</span></pre></div>
-      <p>Wrap <b style="color:var(--a)">int()</b> around <b style="color:var(--a)">input()</b> to convert in one step — this is the standard pattern.</p>`
-    },
-    { type:'quiz', q:'Which correctly asks for a price and calculates 10% tax?',
-      opts:['price = input("Price: ")\nprint(price * 0.1)','price = float(input("Price: "))\nprint(price * 0.1)','price = int(input("Price: "))\nprint(price * 0.1)','price = str(input("Price: "))\nprint(price * 0.1)'], correct:1,
-      ok:'✓ float() is right because prices can be decimals like 9.99.',
-      bad:"✗ Use float(input()) — prices can be decimals. Without conversion you can't multiply a string."
-    },
-    { type:'learn', title:'Putting It All Together', body:`
-      <div class="code-block"><pre><span class="id">name</span> = <span class="fn">input</span>(<span class="str">"Your name: "</span>)
-<span class="id">birth_year</span> = <span class="fn">int</span>(<span class="fn">input</span>(<span class="str">"Birth year: "</span>))
-
-<span class="id">age</span> = <span class="num">2025</span> - <span class="id">birth_year</span>
-
-<span class="fn">print</span>(<span class="str">f"Hi {<span class="id">name</span>}! You are about {<span class="id">age</span>} years old."</span>)</pre></div>
-      <p>This is the core loop of most programs: <b style="color:var(--a)">ask → process → display!</b></p>`
-    },
-  ]},
-
-  { id:4, icon:'🔀', title:'Conditionals', sub:'if / elif / else', xp:80, slides:[
-    { type:'learn', title:'Making Decisions with if', body:`
-      <div class="code-block"><pre><span class="id">age</span> = <span class="num">20</span>
-
-<span class="kw">if</span> <span class="id">age</span> >= <span class="num">18</span>:
-    <span class="fn">print</span>(<span class="str">"You can vote!"</span>)
-
-<span class="fn">print</span>(<span class="str">"Program continues..."</span>)</pre></div>
-      <p>Notice the <b style="color:var(--a)">colon :</b> after the condition and the <b style="color:var(--a2)">4-space indentation</b> on the next line. That's how Python knows what code belongs to the if block.</p>`
-    },
-    { type:'learn', title:'if / else', body:`
-      <div class="code-block"><pre><span class="id">temperature</span> = <span class="num">15</span>
-
-<span class="kw">if</span> <span class="id">temperature</span> > <span class="num">20</span>:
-    <span class="fn">print</span>(<span class="str">"Wear a t-shirt"</span>)
-<span class="kw">else</span>:
-    <span class="fn">print</span>(<span class="str">"Grab a jacket"</span>)</pre></div>
-      <p>Python runs the <b style="color:var(--a)">if</b> block if True, the <b style="color:var(--a)">else</b> block if False. <b>Never both.</b></p>`
-    },
-    { type:'quiz', q:"x = 10\n\nif x > 5:\n    print('big')\nelse:\n    print('small')\n\nWhat prints?",
-      opts:['small','big','big\nsmall','Nothing'], correct:1,
-      ok:'✓ x=10, and 10 > 5 is True, so the if block runs and prints big.',
-      bad:'✗ x=10, 10 > 5 is True → Python prints big. Only one branch ever runs.'
-    },
-    { type:'learn', title:'elif: Multiple Conditions', body:`
-      <div class="code-block"><pre><span class="id">score</span> = <span class="num">75</span>
-
-<span class="kw">if</span> <span class="id">score</span> >= <span class="num">90</span>:
-    <span class="fn">print</span>(<span class="str">"Grade: A"</span>)
-<span class="kw">elif</span> <span class="id">score</span> >= <span class="num">80</span>:
-    <span class="fn">print</span>(<span class="str">"Grade: B"</span>)
-<span class="kw">elif</span> <span class="id">score</span> >= <span class="num">70</span>:
-    <span class="fn">print</span>(<span class="str">"Grade: C"</span>)
-<span class="kw">else</span>:
-    <span class="fn">print</span>(<span class="str">"Grade: F"</span>)</pre></div>
-      <p>Python checks each condition <b style="color:var(--a2)">in order</b> and runs the first one that's True, then skips the rest.</p>`
-    },
-    { type:'learn', title:'Comparison Operators', body:`
-      <div class="code-block"><pre><span class="id">x</span> = <span class="num">10</span>
-
-<span class="id">x</span> == <span class="num">10</span>   <span class="cmt"># Equal to (TWO equals signs!)</span>
-<span class="id">x</span> != <span class="num">5</span>    <span class="cmt"># Not equal to</span>
-<span class="id">x</span> > <span class="num">5</span>     <span class="cmt"># Greater than</span>
-<span class="id">x</span> < <span class="num">20</span>    <span class="cmt"># Less than</span>
-<span class="id">x</span> >= <span class="num">10</span>   <span class="cmt"># Greater than or equal</span>
-<span class="id">x</span> <= <span class="num">10</span>   <span class="cmt"># Less than or equal</span></pre></div>
-      <p>⚠️ Most common beginner mistake: using <b style="color:var(--a3)">=</b> instead of <b style="color:var(--a)">==</b> to check equality. One = assigns; two == compares!</p>`
-    },
-    { type:'quiz', q:'What operator checks if two values are EQUAL?',
-      opts:['=','==','===','equals'], correct:1,
-      ok:'✓ == is the comparison operator. = assigns a value. This trips up almost every beginner!',
-      bad:'✗ Use == (double equals) to compare. A single = assigns a value to a variable.'
-    },
-    { type:'code', title:'Challenge: Grade Checker',
-      inst:'Write an if/else that prints <b style="color:var(--a2)">Pass</b> if score >= 60, or <b style="color:var(--a3)">Fail</b> if below 60.',
-      hint:"score = 75\n\nif score >= 60:\n    print('Pass')\nelse:\n    print('Fail')",
-      check:(c)=>c.includes('if')&&(c.includes('else')||c.includes('elif')),
-      msg:'Your code needs an if and an else (or elif) branch.'
-    },
-  ]},
-
-  { id:5, icon:'🔁', title:'Loops', sub:'while & for', xp:80, slides:[
-    { type:'learn', title:'Why Loops?', body:`
-      <p>Loops let you <b style="color:var(--a)">repeat code</b> without writing it over and over. Two types:</p>
-      <ul>
-        <li><b style="color:var(--a)">while</b> — repeats as long as a condition is True</li>
-        <li><b style="color:var(--a2)">for</b> — repeats a set number of times, or over a sequence</li>
-      </ul>
-      <p>Without a loop, printing 1 to 100 takes 100 lines. With a loop: 2 lines.</p>`
-    },
-    { type:'learn', title:'The while Loop', body:`
-      <div class="code-block"><pre><span class="id">count</span> = <span class="num">1</span>
-
-<span class="kw">while</span> <span class="id">count</span> <= <span class="num">5</span>:
-    <span class="fn">print</span>(<span class="id">count</span>)
-    <span class="id">count</span> = <span class="id">count</span> + <span class="num">1</span>  <span class="cmt"># or: count += 1</span>
-
-<span class="cmt"># Prints: 1  2  3  4  5</span></pre></div>
-      <p>⚠️ Always make sure the condition <b style="color:var(--a3)">eventually becomes False</b> — otherwise you get an infinite loop that freezes your program!</p>`
-    },
-    { type:'quiz', q:'count = 0\nwhile count < 3:\n    print("hi")\n    count += 1\n\nHow many times does "hi" print?',
-      opts:['2','3','4','Infinite'], correct:1,
-      ok:'✓ count goes 0→1→2→3. Prints at 0, 1, 2. At 3, count < 3 is False — loop stops. 3 prints.',
-      bad:'✗ Trace: count=0 (print), 1 (print), 2 (print), 3 (stop). That\'s 3 prints.'
-    },
-    { type:'learn', title:'The for Loop + range()', body:`
-      <div class="code-block"><pre><span class="kw">for</span> <span class="id">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">5</span>):
-    <span class="fn">print</span>(<span class="id">i</span>)
-<span class="cmt"># Prints: 0  1  2  3  4</span>
-
-<span class="kw">for</span> <span class="id">i</span> <span class="kw">in</span> <span class="fn">range</span>(<span class="num">1</span>, <span class="num">6</span>):
-    <span class="fn">print</span>(<span class="id">i</span>)
-<span class="cmt"># Prints: 1  2  3  4  5</span></pre></div>
-      <p>range(5) = 0,1,2,3,4 &nbsp;|&nbsp; range(1,6) = 1,2,3,4,5</p>
-      <p>⚠️ The <b style="color:var(--a3)">end number is NOT included</b> — range stops one before it.</p>`
-    },
-    { type:'quiz', q:'for i in range(2, 5):\n    print(i)\n\nWhat gets printed?',
-      opts:['2 3 4 5','2 3 4','1 2 3 4','0 1 2 3 4'], correct:1,
-      ok:'✓ range(2, 5) starts at 2 and stops before 5: 2, 3, 4.',
-      bad:'✗ range(2, 5) generates 2, 3, 4. It starts at 2 and the end (5) is excluded.'
-    },
-    { type:'code', title:'Challenge: Countdown',
-      inst:'Write a for loop that prints: <b style="color:var(--a2)">5, 4, 3, 2, 1</b> (each on its own line).',
-      hint:'for i in range(5, 0, -1):\n    print(i)',
-      check:(c)=>c.includes('for')&&c.includes('range'),
-      msg:'Use a for loop with range(). Try range(5, 0, -1) to count backwards!'
-    },
-  ]},
-
-  { id:6, icon:'📋', title:'Lists', sub:'Collections of data', xp:80, slides:[
-    { type:'learn', title:'What Is a List?', body:`
-      <p>A <b style="color:var(--a)">list</b> stores multiple values in one variable, inside square brackets:</p>
-      <div class="code-block"><pre><span class="id">fruits</span> = [<span class="str">"apple"</span>, <span class="str">"banana"</span>, <span class="str">"cherry"</span>]
-<span class="id">scores</span> = [<span class="num">95</span>, <span class="num">82</span>, <span class="num">78</span>, <span class="num">90</span>]
-<span class="id">mixed</span>  = [<span class="str">"Alice"</span>, <span class="num">25</span>, <span class="kw">True</span>]   <span class="cmt"># lists can mix types</span>
-
-<span class="fn">print</span>(<span class="id">fruits</span>)  <span class="cmt"># ['apple', 'banana', 'cherry']</span></pre></div>
-      <p>Lists are <b style="color:var(--a2)">ordered</b> (items keep their position) and <b style="color:var(--a)">mutable</b> (you can change them).</p>`
-    },
-    { type:'learn', title:'Indexing — Accessing Items', body:`
-      <div class="code-block"><pre><span class="id">fruits</span> = [<span class="str">"apple"</span>, <span class="str">"banana"</span>, <span class="str">"cherry"</span>]
-<span class="cmt">#           index 0    index 1    index 2</span>
-
-<span class="fn">print</span>(<span class="id">fruits</span>[<span class="num">0</span>])   <span class="cmt"># apple</span>
-<span class="fn">print</span>(<span class="id">fruits</span>[<span class="num">2</span>])   <span class="cmt"># cherry</span>
-<span class="fn">print</span>(<span class="id">fruits</span>[-<span class="num">1</span>])  <span class="cmt"># cherry  (last item!)</span></pre></div>
-      <p><b style="color:var(--a3)">Python counts from 0!</b> Negative indexes count from the end: -1 = last item.</p>`
-    },
-    { type:'quiz', q:'colors = ["red", "green", "blue"]\n\nWhat does colors[1] return?',
-      opts:['"red"','"green"','"blue"','Error'], correct:1,
-      ok:'✓ Python indexes start at 0. Index 1 = second item = "green".',
-      bad:'✗ Python indexes start at 0! Index 0="red", index 1="green", index 2="blue".'
-    },
-    { type:'learn', title:'Modifying Lists', body:`
-      <div class="code-block"><pre><span class="id">nums</span> = [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>]
-
-<span class="id">nums</span>.<span class="fn">append</span>(<span class="num">4</span>)    <span class="cmt"># Add to end:   [1, 2, 3, 4]</span>
-<span class="id">nums</span>.<span class="fn">remove</span>(<span class="num">2</span>)    <span class="cmt"># Remove value: [1, 3, 4]</span>
-<span class="id">nums</span>[<span class="num">0</span>] = <span class="num">10</span>      <span class="cmt"># Change item:  [10, 3, 4]</span>
-
-<span class="fn">print</span>(<span class="fn">len</span>(<span class="id">nums</span>))  <span class="cmt"># Length: 3</span></pre></div>`
-    },
-    { type:'learn', title:'Looping Through a List', body:`
-      <div class="code-block"><pre><span class="id">fruits</span> = [<span class="str">"apple"</span>, <span class="str">"banana"</span>, <span class="str">"cherry"</span>]
-
-<span class="kw">for</span> <span class="id">fruit</span> <span class="kw">in</span> <span class="id">fruits</span>:
-    <span class="fn">print</span>(<span class="str">f"I like {<span class="id">fruit</span>}"</span>)
-
-<span class="cmt"># I like apple</span>
-<span class="cmt"># I like banana</span>
-<span class="cmt"># I like cherry</span></pre></div>
-      <p>No range() needed — the for loop visits each item directly. This is one of the most common Python patterns!</p>`
-    },
-    { type:'quiz', q:'nums = [10, 20, 30]\nnums.append(40)\n\nWhat is len(nums)?',
-      opts:['3','4','40','Error'], correct:1,
-      ok:'✓ Started with 3 items. append(40) added one → [10,20,30,40] → length 4.',
-      bad:'✗ append() adds to the end. [10,20,30] + 40 = [10,20,30,40]. len() counts → 4.'
-    },
-  ]},
-
-  { id:7, icon:'⚙️', title:'Functions', sub:'Reusable blocks of code', xp:90, slides:[
-    { type:'learn', title:'What Is a Function?', body:`
-      <p>A <b style="color:var(--a)">function</b> is a named, reusable block of code. Write it once, call it any time.</p>
-      <p>You've already used built-in functions: print(), input(), len(), int(). Now you'll create your own!</p>
-      <div class="code-block"><pre><span class="kw">def</span> <span class="fn">greet</span>():
-    <span class="fn">print</span>(<span class="str">"Hello, welcome!"</span>)
-
-<span class="fn">greet</span>()   <span class="cmt"># Call it once</span>
-<span class="fn">greet</span>()   <span class="cmt"># Call it again!</span></pre></div>`
-    },
-    { type:'learn', title:'Parameters & Arguments', body:`
-      <div class="code-block"><pre><span class="kw">def</span> <span class="fn">greet</span>(<span class="id">name</span>):
-    <span class="fn">print</span>(<span class="str">f"Hello, {<span class="id">name</span>}!"</span>)
-
-<span class="fn">greet</span>(<span class="str">"Mike"</span>)    <span class="cmt"># Hello, Mike!</span>
-<span class="fn">greet</span>(<span class="str">"Alice"</span>)   <span class="cmt"># Hello, Alice!</span>
-
-<span class="kw">def</span> <span class="fn">add</span>(<span class="id">a</span>, <span class="id">b</span>):
-    <span class="fn">print</span>(<span class="id">a</span> + <span class="id">b</span>)
-
-<span class="fn">add</span>(<span class="num">3</span>, <span class="num">5</span>)        <span class="cmt"># 8</span></pre></div>
-      <p><b style="color:var(--a)">Parameter</b> = the variable in the definition. <b style="color:var(--a2)">Argument</b> = the actual value you pass when calling.</p>`
-    },
-    { type:'quiz', q:'def multiply(x, y):\n    print(x * y)\n\nmultiply(4, 3)\n\nWhat is printed?',
-      opts:['x * y','7','12','Error'], correct:2,
-      ok:'✓ multiply(4, 3) sets x=4, y=3. Prints 4 * 3 = 12.',
-      bad:'✗ multiply(4, 3) → x=4, y=3 → 4 * 3 = 12.'
-    },
-    { type:'learn', title:'The return Statement', body:`
-      <div class="code-block"><pre><span class="kw">def</span> <span class="fn">square</span>(<span class="id">n</span>):
-    <span class="kw">return</span> <span class="id">n</span> * <span class="id">n</span>
-
-<span class="id">result</span> = <span class="fn">square</span>(<span class="num">5</span>)
-<span class="fn">print</span>(<span class="id">result</span>)          <span class="cmt"># 25</span>
-
-<span class="fn">print</span>(<span class="fn">square</span>(<span class="num">3</span>) + <span class="num">1</span>)   <span class="cmt"># 10</span></pre></div>
-      <p><b style="color:var(--a)">return</b> sends a value back so you can use it elsewhere. Without return, a function gives back <b style="color:var(--muted)">None</b>.</p>`
-    },
-    { type:'quiz', q:'def double(n):\n    return n * 2\n\nresult = double(6)\nprint(result)\n\nWhat prints?',
-      opts:['n * 2','None','12','6'], correct:2,
-      ok:'✓ double(6) → n=6 → 6*2=12 → returned and stored in result → printed.',
-      bad:'✗ double(6) computes 6 * 2 = 12, returns it, stored in result, then printed.'
-    },
-    { type:'code', title:'Challenge: area() Function',
-      inst:'Write a function called <b style="color:var(--a)">area</b> that takes <b style="color:var(--a2)">width</b> and <b style="color:var(--a2)">height</b> and <b style="color:var(--a)">returns</b> their product. Then call it and print the result.',
-      hint:'def area(width, height):\n    return width * height\n\nresult = area(4, 5)\nprint(result)  # 20',
-      check:(c)=>c.includes('def area')&&c.includes('return'),
-      msg:'Define a function called area that uses the return keyword.'
-    },
-  ]},
-];
-
-const TOTAL_XP = LESSONS.reduce((s,l)=>s+l.xp,0);
-
-/* ══════════════════════════════════════════
-   STATE
-══════════════════════════════════════════ */
-let userId = '';
-let xp = 0;
-let completed = [];
-let curLesson = 0;
-let curSlide  = 0;
-let quizDone  = false;
-let sessionXP = 0;
-// Supabase init
-const supabaseUrl = 'https://bbtdjyijtdilzorsxyad.supabase.co'
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJidGRqeWlqdGRpbHpvcnN4eWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDI4MDcsImV4cCI6MjA5MjM3ODgwN30.w0Pdcg0lLw8MoLQt1RvIPOH8KZVZ9LAMuuLUtNQCS7Q'
-const { createClient } = supabase
-const db = createClient(supabaseUrl, supabaseKey)
-
-
-/* ══════════════════════════════════════════
-   API
-══════════════════════════════════════════ */
-async function apiLoad(uid) {
-  try {
-    const { data } = await db
-      .from('user_progress')
-      .select('xp, completed')
-      .eq('user_id', uid)
-      .single()
-    return data || { xp: 0, completed: [] }
-  } catch { return { xp: 0, completed: [] } }
-}
-
-async function apiSave(uid, payload) {
-  try {
-    await db
-      .from('user_progress')
-      .upsert({
-        user_id: uid,
-        xp: payload.xp,
-        completed: payload.completed,
-        updated_at: new Date().toISOString()
-      }, { onConflict: 'user_id' })
-  } catch {}
-}
-
-/* ══════════════════════════════════════════
-   SCREENS
-══════════════════════════════════════════ */
-function show(id) {
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
-}
-
-/* ══════════════════════════════════════════
-   LOGIN
-══════════════════════════════════════════ */
-document.getElementById('login-input').addEventListener('keydown', e => {
-  if (e.key === 'Enter') doLogin();
-});
-
-async function doLogin() {
-  const val = document.getElementById('login-input').value.trim();
-  if (!val) return;
-  userId = val.toLowerCase().replace(/\s+/g,'_');
-  const data = await apiLoad(userId);
-  xp = data.xp || 0;
-  completed = data.completed || [];
-  renderHome();
-  show('s-home');
-}
-
-/* ══════════════════════════════════════════
-   HOME
-══════════════════════════════════════════ */
-function renderHome() {
-  document.getElementById('user-badge').textContent = '👤 ' + document.getElementById('login-input').value.trim();
-  document.getElementById('xp-display').textContent = `${xp} / ${TOTAL_XP}`;
-  document.getElementById('xp-fill').style.width = `${Math.min(100,(xp/TOTAL_XP)*100)}%`;
-
-  const grid = document.getElementById('lesson-grid');
-  grid.innerHTML = '';
-  LESSONS.forEach((l,i) => {
-    const unlocked = i===0 || completed.includes(i-1);
-    const done = completed.includes(i);
-    const d = document.createElement('div');
-    d.className = `card ${unlocked?'unlocked':''} ${done?'done':''} ${!unlocked?'locked':''}`;
-    d.innerHTML = `
-      ${done?'<span class="card-check">✓</span>':''}
-      <div class="card-icon">${l.icon}</div>
-      <div class="card-num">Lesson ${i+1}</div>
-      <div class="card-title">${l.title}</div>
-      <div class="card-sub">${l.sub}</div>`;
-    if (unlocked) d.onclick = () => startLesson(i);
-    grid.appendChild(d);
-  });
-}
-
-function goHome() { renderHome(); show('s-home'); }
-
-/* ══════════════════════════════════════════
-   LESSON
-══════════════════════════════════════════ */
-function startLesson(idx) {
-  curLesson = idx;
-  curSlide  = 0;
-  quizDone  = false;
-  sessionXP = 0;
-  const l = LESSONS[idx];
-  document.getElementById('lesson-h-title').textContent = l.title;
-  document.getElementById('lesson-h-sub').textContent   = l.sub;
-  renderDots();
-  renderSlide();
-  show('s-lesson');
-}
-
-function renderDots() {
-  const l = LESSONS[curLesson];
-  document.getElementById('dots').innerHTML =
-    l.slides.map((_,i)=>`<div class="dot ${i<curSlide?'done':i===curSlide?'active':''}" id="dot${i}"></div>`).join('');
-}
-
-function renderSlide() {
-  const l = LESSONS[curLesson];
-  const s = l.slides[curSlide];
-  const total = l.slides.length;
-
-  renderDots();
-  document.getElementById('slide-counter').textContent = `${curSlide+1} / ${total}`;
-  document.getElementById('btn-prev').disabled = curSlide===0;
-
-  const nextBtn = document.getElementById('btn-next');
-  nextBtn.textContent = curSlide===total-1 ? 'Finish 🎉' : 'Next →';
-  nextBtn.disabled = s.type==='quiz' && !quizDone;
-
-  const body = document.getElementById('lesson-body');
-
-  if (s.type==='learn') {
-    body.innerHTML = `
-      <div class="slide">
-        <div class="badge badge-learn">📖 Learn</div>
-        <h3>${s.title}</h3>
-        ${s.body}
-      </div>`;
-  } else if (s.type==='quiz') {
-    const qLines = s.q.split('\n');
-    const qTitle = qLines[0];
-    const qCode  = qLines.slice(1).join('\n').trim();
-    body.innerHTML = `
-      <div class="slide">
-        <div class="badge badge-quiz">🧠 Quiz</div>
-        <h3>${qTitle}</h3>
-        ${qCode ? `<div class="code-block"><pre>${qCode}</pre></div>` : ''}
-        <div class="quiz-opts" id="quiz-opts">
-          ${s.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQuiz(${i})" id="qo${i}">${o}</button>`).join('')}
-        </div>
-        <div class="feedback" id="feedback"></div>
-      </div>`;
-  } else if (s.type==='code') {
-    body.innerHTML = `
-      <div class="slide">
-        <div class="badge badge-code">💻 Code Challenge</div>
-        <h3>${s.title}</h3>
-        <p style="font-size:.91rem;line-height:1.75;color:#b0b8d0;margin-bottom:.9rem">${s.inst}</p>
-        <div class="code-wrap">
-          <div class="code-label">✏️ Your Code</div>
-          <textarea class="code-area" id="code-area" placeholder="Type your Python code here..."></textarea>
-        </div>
-        <div class="code-btns">
-          <button class="btn-run" onclick="checkCode()">▶ Check</button>
-          <button class="btn-hint" onclick="showHint()">💡 Hint</button>
-        </div>
-        <div class="output" id="code-output"></div>
-      </div>`;
-  }
-}
-
-function nextSlide() {
-  const l = LESSONS[curLesson];
-  if (curSlide < l.slides.length-1) {
-    curSlide++;
-    quizDone = false;
-    renderSlide();
-  } else {
-    finishLesson();
-  }
-}
-
-function prevSlide() {
-  if (curSlide > 0) { curSlide--; quizDone=false; renderSlide(); }
-}
-
-function answerQuiz(idx) {
-  if (quizDone) return;
-  const s = LESSONS[curLesson].slides[curSlide];
-  quizDone = true;
-  s.opts.forEach((_,i) => {
-    const b = document.getElementById('qo'+i);
-    b.disabled = true;
-    if (i===s.correct) b.classList.add('correct');
-    else if (i===idx && i!==s.correct) b.classList.add('wrong');
-  });
-  const fb = document.getElementById('feedback');
-  const correct = idx===s.correct;
-  fb.className = `feedback show ${correct?'good':'bad'}`;
-  fb.textContent = correct ? s.ok : s.bad;
-  if (correct) { addXP(5); showToast('✓ Correct! +5 XP'); }
-  document.getElementById('btn-next').disabled = false;
-}
-
-function checkCode() {
-  const s = LESSONS[curLesson].slides[curSlide];
-  const code = document.getElementById('code-area').value.trim();
-  const out  = document.getElementById('code-output');
-  if (!code) { out.className='output show err'; out.textContent='Write some code first!'; return; }
-  const passed = s.check ? s.check(code) : true;
-  if (passed) {
-    out.className='output show ok';
-    out.textContent='✓ Looks great! Your code structure is correct.\n\nTo run it: visit replit.com or python.org/shell and paste it in.';
-    addXP(10); showToast('✓ Code accepted! +10 XP');
-  } else {
-    out.className='output show err'; out.textContent='✗ '+s.msg;
-  }
-}
-
-function showHint() {
-  const s = LESSONS[curLesson].slides[curSlide];
-  const out = document.getElementById('code-output');
-  out.className='output show hint';
-  out.textContent='💡 Hint:\n\n'+s.hint;
-}
-
-function addXP(n) { xp = Math.min(TOTAL_XP, xp+n); sessionXP+=n; }
-
-async function finishLesson() {
-  const already = completed.includes(curLesson);
-  if (!already) {
-    xp = Math.min(TOTAL_XP, xp + LESSONS[curLesson].xp);
-    sessionXP += LESSONS[curLesson].xp;
-    completed.push(curLesson);
-    await apiSave(userId, { xp, completed });
-  }
-  document.getElementById('r-icon').textContent  = already?'⭐':'🎉';
-  document.getElementById('r-title').textContent = LESSONS[curLesson].title+' Complete!';
-  document.getElementById('r-sub').textContent   = already?'Great review — already mastered!':'Well done, Pythonista!';
-  document.getElementById('r-xp').textContent    = sessionXP>0?`+${sessionXP}`:'+0';
-  document.getElementById('r-save').textContent  = already?'⭐ Already completed':'💾 Progress saved to cloud';
-
-  const nb = document.getElementById('btn-next-lesson');
-  if (curLesson+1 < LESSONS.length) {
-    nb.style.display='';
-    nb.textContent=`Next: ${LESSONS[curLesson+1].title} →`;
-  } else { nb.style.display='none'; }
-
-  show('s-result');
-}
-
-function goNextLesson() {
-  if (curLesson+1 < LESSONS.length) startLesson(curLesson+1);
-}
-
-/* ══════════════════════════════════════════
-   TOAST
-══════════════════════════════════════════ */
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent=msg; t.className='toast good show';
-  setTimeout(()=>t.className='toast good',2500);
-}
-</script>
+<script src="lessons.js"></script>
+<script src="app.js"></script>
 </body>
 </html>
