@@ -665,17 +665,25 @@ const db = createClient(supabaseUrl, supabaseKey)
 ══════════════════════════════════════════ */
 async function apiLoad(uid) {
   try {
-    const r = await fetch(`/progress/${encodeURIComponent(uid)}`);
-    return await r.json();
-  } catch { return { xp:0, completed:[] }; }
+    const { data } = await db
+      .from('user_progress')
+      .select('xp, completed')
+      .eq('user_id', uid)
+      .single()
+    return data || { xp: 0, completed: [] }
+  } catch { return { xp: 0, completed: [] } }
 }
 
-async function apiSave(uid, data) {
+async function apiSave(uid, payload) {
   try {
-    await fetch(`/progress/${encodeURIComponent(uid)}`, {
-      method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify(data)
-    });
+    await db
+      .from('user_progress')
+      .upsert({
+        user_id: uid,
+        xp: payload.xp,
+        completed: payload.completed,
+        updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id' })
   } catch {}
 }
 
