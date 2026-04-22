@@ -653,6 +653,12 @@ let curLesson = 0;
 let curSlide  = 0;
 let quizDone  = false;
 let sessionXP = 0;
+// Supabase init
+const supabaseUrl = 'https://bbtdjyijtdilzorsxyad.supabase.co'
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJidGRqeWlqdGRpbHpvcnN4eWFkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzY4MDI4MDcsImV4cCI6MjA5MjM3ODgwN30.w0Pdcg0lLw8MoLQt1RvIPOH8KZVZ9LAMuuLUtNQCS7Q'
+const { createClient } = supabase
+const db = createClient(supabaseUrl, supabaseKey)
+
 
 /* ══════════════════════════════════════════
    API
