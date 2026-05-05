@@ -85,11 +85,52 @@ function renderHome() {
   var wrap = document.getElementById('lesson-grid-wrap');
   wrap.innerHTML = '';
 
-  TIERS.forEach(function(tier) {
-    var lbl = document.createElement('div');
-    lbl.className = 'tier-label';
-    lbl.textContent = tier.label;
-    wrap.appendChild(lbl);
+  var lastTrack = null;
+
+  TIERS.forEach(function(tier, tierIdx) {
+    // Track separator when track changes
+    if (tier.track !== lastTrack) {
+      lastTrack = tier.track;
+      var th = document.createElement('div');
+      th.className = 'track-header';
+      th.innerHTML =
+        '<div class="track-header-line"></div>' +
+        '<span class="track-title ' + (tier.track === 'python' ? 'track-python' : 'track-pm') + '">' +
+        (tier.track === 'python' ? '🐍 Python' : '🧠 PM Skills') + '</span>' +
+        '<div class="track-header-line"></div>';
+      wrap.appendChild(th);
+    }
+
+    // Count completed in this tier
+    var tierIdxes = [];
+    for (var i = tier.range[0]; i <= tier.range[1]; i++) tierIdxes.push(i);
+    var doneCount = tierIdxes.filter(function(i){ return completed.indexOf(i) >= 0; }).length;
+
+    // Collapsible section
+    var section = document.createElement('div');
+    section.className = 'tier-section';
+
+    var isFirstOfTrack = (tierIdx === 0) || (TIERS[tierIdx - 1].track !== tier.track);
+
+    var header = document.createElement('div');
+    header.className = 'tier-header';
+    header.innerHTML =
+      '<span class="tier-header-title">' + tier.label + '</span>' +
+      '<span class="tier-header-right">' +
+        '<span class="tier-progress">' + doneCount + ' / ' + tierIdxes.length + '</span>' +
+        '<span class="tier-chevron' + (isFirstOfTrack ? ' open' : '') + '" id="chev' + tierIdx + '">▶</span>' +
+      '</span>';
+
+    var body = document.createElement('div');
+    body.className = 'tier-body' + (isFirstOfTrack ? ' open' : '');
+    body.id = 'tbody' + tierIdx;
+
+    header.addEventListener('click', (function(idx) {
+      return function() {
+        document.getElementById('tbody' + idx).classList.toggle('open');
+        document.getElementById('chev' + idx).classList.toggle('open');
+      };
+    })(tierIdx));
 
     var grid = document.createElement('div');
     grid.className = 'grid';
@@ -97,20 +138,34 @@ function renderHome() {
     for (var i = tier.range[0]; i <= tier.range[1]; i++) {
       (function(idx) {
         var l = LESSONS[idx];
-        var unlocked = idx === 0 || completed.indexOf(idx - 1) >= 0;
         var done = completed.indexOf(idx) >= 0;
+        // Python: sequential unlock. PM Skills: all open.
+        var unlocked = (l.track === 'python')
+          ? (idx === 0 || completed.indexOf(idx - 1) >= 0)
+          : true;
+
+        var diffMap = { beginner: ['diff-beginner','Beginner'], familiar: ['diff-familiar','Some Familiarity'], experienced: ['diff-experienced','Tech Exposure'] };
+        var diff = l.difficulty && diffMap[l.difficulty] ? diffMap[l.difficulty] : null;
+
         var d = document.createElement('div');
-        d.className = 'card ' + (unlocked ? 'unlocked' : 'locked') + ' ' + (done ? 'done' : '');
-        d.innerHTML = (done ? '<span class="card-check">&#10003;</span>' : '') +
+        d.className = 'card ' + (unlocked ? 'unlocked' : 'locked') + (done ? ' done' : '');
+        d.innerHTML =
+          (done ? '<span class="card-check">✓</span>' : '') +
           '<div class="card-icon">' + l.icon + '</div>' +
-          '<div class="card-num">Lesson ' + (idx + 1) + '</div>' +
+          '<div class="card-num">' + (l.track === 'python' ? 'Lesson ' + (idx + 1) : (l.module || 'PM Skills')) + '</div>' +
           '<div class="card-title">' + l.title + '</div>' +
-          '<div class="card-sub">' + l.sub + '</div>';
-        if (unlocked) { d.onclick = function() { startLesson(idx); }; }
+          '<div class="card-sub">' + l.sub + '</div>' +
+          (diff ? '<div class="card-diff ' + diff[0] + '">' + diff[1] + '</div>' : '');
+
+        if (unlocked) d.onclick = function() { startLesson(idx); };
         grid.appendChild(d);
       })(i);
     }
-    wrap.appendChild(grid);
+
+    body.appendChild(grid);
+    section.appendChild(header);
+    section.appendChild(body);
+    wrap.appendChild(section);
   });
 }
 
@@ -123,14 +178,14 @@ function startLesson(idx) {
   curLesson = idx; curSlide = 0; quizDone = false; sessionXP = 0;
   var l = LESSONS[idx];
   document.getElementById('lesson-h-title').textContent = l.title;
-  document.getElementById('lesson-h-sub').textContent = l.sub;
+  document.getElementById('lesson-h-sub').textContent = l.track === 'python' ? '🐍 Python' : '🧠 PM Skills';
   renderDots(); renderSlide(); show('s-lesson');
 }
 
 function renderDots() {
   var l = LESSONS[curLesson];
   document.getElementById('dots').innerHTML = l.slides.map(function(_, i) {
-    return '<div class="dot ' + (i < curSlide ? 'done' : i === curSlide ? 'active' : '') + '" id="dot' + i + '"></div>';
+    return '<div class="dot ' + (i < curSlide ? 'done' : i === curSlide ? 'active' : '') + '"></div>';
   }).join('');
 }
 
@@ -158,8 +213,7 @@ function renderSlide() {
       '<p style="font-size:.91rem;line-height:1.75;color:#b0b8d0;margin-bottom:.9rem">' + s.inst + '</p>' +
       '<div class="code-wrap"><div class="code-label">Your Code</div>' +
       '<textarea class="code-area" id="code-area" placeholder="Type your Python code here..."></textarea></div>' +
-      '<div class="code-btns">' +
-      '<button class="btn-run" onclick="checkCode()">Check</button>' +
+      '<div class="code-btns"><button class="btn-run" onclick="checkCode()">Check</button>' +
       '<button class="btn-hint" onclick="showHint()">Hint</button></div>' +
       '<div class="output" id="code-output"></div></div>';
   }
@@ -221,9 +275,10 @@ async function finishLesson() {
     completed.push(curLesson);
     await sbSave(userId, { xp: xp, completed: completed });
   }
+  var trackLabel = LESSONS[curLesson].track === 'python' ? 'Pythonista' : 'PM Pro';
   document.getElementById('r-icon').textContent = already ? '⭐' : '🎉';
   document.getElementById('r-title').textContent = LESSONS[curLesson].title + ' Complete!';
-  document.getElementById('r-sub').textContent = already ? 'Great review!' : 'Well done, Pythonista!';
+  document.getElementById('r-sub').textContent = already ? 'Great review!' : 'Well done, ' + trackLabel + '!';
   document.getElementById('r-xp').textContent = sessionXP > 0 ? '+' + sessionXP : '+0';
   document.getElementById('r-save').textContent = already ? 'Already completed' : 'Progress saved to cloud';
   var nb = document.getElementById('btn-next-lesson');
